@@ -4,6 +4,7 @@
   "description": "bruh",
   "main": "index.js",
   "scripts": {
+    "build:ui": "rm -rf build && cd ../../../../fullstack-open-university/part2/Phonebook/ && npm run build && cp -r build ../../../fullstack-open-university3/full_stack_open_university_helsinki/part3/phonebook/" ,
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
