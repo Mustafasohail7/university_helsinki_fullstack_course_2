@@ -127,6 +127,32 @@ test('url property is missing from the request', async () => {
     await api.post('/api/blogs').send(newBlog).expect(400)
 })
 
+test('a note can be deleted', async () => {
+    const response = await api.get('/api/blogs')
+    const blogToDelete = response.body[0]
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+    const response2 = await api.get('/api/blogs')
+    expect(response2.body).toHaveLength(1)
+
+    const contents = response2.body.map(r => r.title)
+    expect(contents).not.toContain(blogToDelete.title)
+})
+
+test('a note can be updated', async () => {
+    const response = await api.get('/api/blogs')
+    const blogToUpdate = response.body[0]
+    const newBlog = {
+        title: blogToUpdate.title,
+        author: blogToUpdate.author,
+        url: blogToUpdate.url,
+        likes: 100
+    }
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(newBlog).expect(200)
+    const response2 = await api.get('/api/blogs')
+    expect(response2.body[0].likes).toEqual(100)
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
