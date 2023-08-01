@@ -1,8 +1,7 @@
-const config = require('../utils/config')
+const middleware = require('../utils/middleware')
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
 
 const getTokenFrom = request => {
   const authorization = request.get('authorization')
@@ -27,7 +26,7 @@ blogRouter.get('/:id', async (request, response, next) => {
     }
   })
 
-blogRouter.post('/', async (request, response, next) => {
+blogRouter.post('/', middleware.userExtractor , async (request, response, next) => {
   const body = request.body
   const user = await User.findById(request.user.id)
 
@@ -49,8 +48,7 @@ blogRouter.post('/', async (request, response, next) => {
   response.status(201).json(blog)
 })
 
-blogRouter.delete('/:id', async (request, response, next) => {
-  console.log(request.user.id)
+blogRouter.delete('/:id', middleware.userExtractor ,async (request, response, next) => {
   const blogOwner = await Blog.findById(request.params.id)
   if(blogOwner.user.toString() !== request.user.id.toString()) {
     return response.status(401).json({ error: 'unauthorized user' })
