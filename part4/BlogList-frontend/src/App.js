@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import Notification from './components/Notification'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username,setUsername] = useState('')
@@ -12,6 +14,8 @@ const App = () => {
   const [author,setAuthor] = useState('')
   const [url,setUrl] = useState('')
   const [likes,setLikes] = useState(0)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [type,setType] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -42,11 +46,19 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setType(1)
+      setErrorMessage('Logged in')
+      setTimeout(() => {
+        setErrorMessage(null)
+        setType(null)
+      },5000)
     } catch (exception) {
-      console.log('Wrong credentials')
-      // setTimeout(() => {
-      //   console.log(null)
-      // }, 5000)
+      setErrorMessage('Wrong credentials')
+      setType(0)
+      setTimeout(() => {
+        setErrorMessage(null)
+        setType(null)
+      }, 5000)
     }
   }
 
@@ -110,12 +122,27 @@ const App = () => {
       likes,
     }
 
-    const result = await blogService.create(blogObject)
-    setBlogs(blogs.concat(result))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-    setLikes(0)
+    try{
+      const result = await blogService.create(blogObject)  
+      setBlogs(blogs.concat(result))
+      setErrorMessage(`a new blog ${title} by ${author} added`)
+      setType(1)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setLikes(0)
+      setTimeout(() => {
+        setErrorMessage(null)
+        setType(null)
+      },5000)
+    } catch (exception) {
+      setErrorMessage('Invalid blog')
+      setType(0)
+      setTimeout(() => {
+        setErrorMessage(null)
+        setType(null)
+      }, 5000)
+    }
   }
   
   const handleLogout = () => {
@@ -126,6 +153,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={errorMessage} type={type} />
       {!user && loginForm()}
       {user && <div>
         <p>{user.name} is logged in<button onClick={handleLogout}>logout</button></p>
