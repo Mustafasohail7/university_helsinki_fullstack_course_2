@@ -113,6 +113,8 @@ const App = () => {
     setUser(null)
   }
 
+  console.log(blogs)
+
   return (
     <div>
       <h2>blogs</h2>
