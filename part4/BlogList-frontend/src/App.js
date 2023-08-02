@@ -99,6 +99,7 @@ const App = () => {
         setType(null)
       },5000)
     } catch (exception) {
+      console.log(exception)
       setErrorMessage('Invalid blog')
       setType(0)
       setTimeout(() => {
@@ -112,8 +113,6 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }
-
-  console.log(blogs)
 
   return (
     <div>
