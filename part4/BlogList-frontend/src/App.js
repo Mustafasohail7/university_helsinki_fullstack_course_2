@@ -18,10 +18,9 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
+    blogService.getAll().then(blogs => 
+      setBlogs( blogs ))
+  },[])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -122,11 +121,12 @@ const App = () => {
       {user && <div>
         <p>{user.name} is logged in<button onClick={handleLogout}>logout</button></p>
         <Togglable buttonLabel='new blog' ref={blogFormRef}>
-          <BlogForm  addBlog={addBlog} />
+          <BlogForm  addBlog={addBlog}/>
         </Togglable>
         </div>}
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {}
+      {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+        <Blog key={blog.id} blog={blog} user={user} setBlogs={setBlogs}/>
       )}
     </div>
   )

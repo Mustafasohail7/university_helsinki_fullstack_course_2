@@ -3,15 +3,6 @@ const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  console.log(authorization)
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
@@ -60,7 +51,6 @@ blogRouter.delete('/:id', middleware.userExtractor ,async (request, response, ne
 
 blogRouter.put('/:id', async (request, response, next) => {
   const body = request.body
-
   if(body.updateLike){
     const blog = await Blog.findById(request.params.id)
     blog.likes = blog.likes + 1
