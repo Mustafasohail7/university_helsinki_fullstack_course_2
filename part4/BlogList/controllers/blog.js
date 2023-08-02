@@ -61,6 +61,13 @@ blogRouter.delete('/:id', middleware.userExtractor ,async (request, response, ne
 blogRouter.put('/:id', async (request, response, next) => {
   const body = request.body
 
+  if(body.updateLike){
+    const blog = await Blog.findById(request.params.id)
+    blog.likes = blog.likes + 1
+    await blog.save()
+    response.json(blog)
+  }
+
   const note = {
     title: body.title,
     author: body.author,
@@ -68,8 +75,8 @@ blogRouter.put('/:id', async (request, response, next) => {
     likes: body.likes
   }
 
-  const blog = await Blog.findByIdAndUpdate(request.params.id, note, { new: true })
-  response.json(blog)
+  // const blog = await Blog.findByIdAndUpdate(request.params.id, note, { new: true })
+  // response.json(blog)
 })
 
 module.exports = blogRouter
