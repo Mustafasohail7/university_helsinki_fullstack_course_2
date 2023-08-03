@@ -3,10 +3,10 @@ import { useState } from "react"
 import './Blog.css'
 
 import blogService from '../services/blogs'
+import BlogItem from "./BlogItem"
 
 const Blog = ({blog,user,setBlogs}) => {
 
-  const [show,setShow] = useState(false)
   const [blogLikes,setBlogLikes] = useState(blog.likes)
 
   const handleLike  = async (id) => {
@@ -21,29 +21,8 @@ const Blog = ({blog,user,setBlogs}) => {
     }
   }
 
-  let isOwner
-  try {
-    isOwner = blog.user.username === user.username 
-  } catch (error) {
-    isOwner = false
-  }
-
   return (
-    <div className="blog-container">
-      {blog.title}
-      <button onClick={() => setShow(!show)}>
-        {show ? 'hide' : 'view'}
-      </button>
-      {show &&
-      <div>
-        <p>{blog.url}</p>
-        <p>{blogLikes}<button onClick={() => handleLike(blog.id)}>like</button></p>
-        <p>{blog.user.name}</p>
-        {isOwner && <button onClick={handleDelete}>remove</button>}
-      </div>
-
-      } 
-    </div>  
+     <BlogItem blog={blog} handleLike={handleLike} handleDelete={handleDelete} blogLikes={blogLikes} user={user} />
   )
 }
 
