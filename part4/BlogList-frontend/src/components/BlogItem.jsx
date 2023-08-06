@@ -19,7 +19,7 @@ const BlogItem = ({blog,handleLike,handleDelete,blogLikes,user}) => {
       {show &&
         <div>
           <p>{blog.url}</p>
-          <p>{blogLikes}<button onClick={() => handleLike(blog.id)}>like</button></p>
+          <p>{blogLikes}<button id="like-button" onClick={() => handleLike(blog.id)}>like</button></p>
           <p>{blog.user.name}</p>
           {isOwner && <button onClick={handleDelete}>remove</button>}
         </div>} 
