@@ -4,3 +4,5 @@ This section covers:
 * Server programming with NodeJS and ExpressJS.
 * Testing ExpressJS Servers.
 * Testing User Administration
+* Testing React App using Snapshot Testing w/ Jest
+* E2E testing with Cypress
